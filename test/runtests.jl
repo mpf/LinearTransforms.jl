@@ -59,6 +59,10 @@ end
         @test eltype(op) == Float64
         op = opMask{Complex{Float64}}(M)
         @test eltype(op) == Complex{Float64}
+
+        # test size
+        @test size(op) == (nnz(M), size(M)) 
+
     end
 
     @testset "factored matrices" begin
@@ -82,6 +86,10 @@ end
         @test eltype(op) == Float64
         op = opMaskFactored{Int64}(M)
         @test eltype(op) == Int64
+
+        # test size
+        @test size(op) == (nnz(M), size(M))
+
     end
 end
 

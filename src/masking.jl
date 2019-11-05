@@ -26,7 +26,7 @@ function opMaskFactored{T}(M::SparseMatrixCSC) where {T}
     adjoint(I, J, w) = sparse(I, J, w)
 
     dimsDomain = size(M)
-    dimsRange = (nnz(M),)
+    dimsRange = nnz(M)
     I, J = findnz(M)[1:2]
     prod = uv -> forward(nnz(M), I, J, uv[1], uv[2])
     tprod = w -> adjoint(I, J, w)
@@ -46,7 +46,7 @@ Create a masking linear operator.
 """
 function opMask{T}(M::SparseMatrixCSC) where {T}
     dimsDomain = size(M)
-    dimsRange = (nnz(M),)
+    dimsRange = nnz(M)
     I, J = findnz(M)[1:2]
     prod = X -> [X[i,j] for (i,j) in zip(I,J)]
     tprod = w -> sparse(I, J, w, dimsDomain...)
