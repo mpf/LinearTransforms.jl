@@ -31,7 +31,7 @@ end
 Print a description of the generalized linear operator.
 """
 function show(io::IO, op::AbstractLinearTransform)
-    println(io,"Generalized linear operator")
+    println(io,"Generalized linear transform")
     println(io,"  dim  range: ", op.dimsDomain)
     print(io,"  dim domain: ", op.dimsRange)
 end
@@ -94,3 +94,26 @@ function dottest(A::AbstractLinearTransform, k=100; verbose=false)
 
     status = kpass != 0
 end
+
+
+"""
+    Matrix(op::AbstractLinearTransform)
+
+Return a matrix representation of the operator, if the sizes are
+1-dimensional, and not tuples.
+"""
+function Matrix(op::AbstractLinearTransform)
+    m, n = size(op)
+    !(length(m) == length(n) == 1) && error("Dims cannot be tuples")
+    T = eltype(op)
+    mat = Matrix{T}(undef, (m, n))
+    v = fill(zero(T), n)
+    @inbounds for i = 1:n
+        v[i] = one(T)
+        mul!(view(mat, :, i), op, v)
+        v[i] = zero(T)
+    end
+    return mat
+end
+
+

@@ -14,3 +14,4 @@ function -(op::AbstractLinearTransform)
     tprod = w -> -op.tprod(w)
     LinearTransform(op.dimsRange, op.dimsDomain, prod, tprod)
 end
+
